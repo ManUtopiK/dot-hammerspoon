@@ -53,11 +53,17 @@ appCuts = {
 }
 for key, app in pairs(appCuts) do
     hs.hotkey.bind(hyper, key, function()
-    hs.application.launchOrFocus(app)
-    moveCursorToCenterWindow()
-    if (app == 'keeweb' or app == 'ForkLift') then
-        hs.eventtap.keyStroke('cmd', 'F')
-    end
+        hs.application.launchOrFocus(app)
+        if (app == 'keeweb' or app == 'ForkLift') then
+            local win = hs.window.focusedWindow()
+            local f = win:frame()
+            hs.eventtap.leftClick({
+                x = f.x + f.w / 1.7,
+                y = f.y + f.h / 2,
+            })
+            hs.eventtap.keyStroke('cmd', 'F', 30)
+        end
+        moveCursorToCenterWindow()
     end)
 end
 
@@ -415,6 +421,6 @@ appWatcher:start()
 
 
 -- track events
---[[ foo = hs.distributednotifications.new(function(name, object, userInfo) print(string.format("name: %s\nobject: %s\nuserInfo: %s\n", name, object, hs.inspect(userInfo))) end)
-foo:start() ]]
+foo = hs.distributednotifications.new(function(name, object, userInfo) print(string.format("name: %s\nobject: %s\nuserInfo: %s\n", name, object, hs.inspect(userInfo))) end)
+foo:start()
 
