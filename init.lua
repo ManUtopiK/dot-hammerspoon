@@ -67,8 +67,14 @@ for key, app in pairs(appCuts) do
     end)
 end
 
-hs.hotkey.bind(hyper, 'escape', function()
+-- Hints mode : show letter on each application and toggle to it
+hs.hotkey.bind({'shift'}, 'escape', function()
     hs.hints.windowHints()
+end)
+
+-- Show my notes on visual studio code
+hs.hotkey.bind(hyper, 'n', function()
+    hs.execute('code ~/Manu/notes', true)
 end)
 
 -- hyper {DELETE} lock the screen
