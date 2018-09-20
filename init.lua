@@ -56,16 +56,41 @@ for key, app in pairs(appCuts) do
         hs.application.launchOrFocus(app)
         if (app == 'keeweb' or app == 'ForkLift') then
             local win = hs.window.focusedWindow()
-            local f = win:frame()
-            hs.eventtap.leftClick({
-                x = f.x + f.w / 1.7,
-                y = f.y + f.h / 2,
-            })
+            if (app == 'keeweb') then
+                local f = win:frame()
+                hs.eventtap.leftClick({
+                    x = f.x + f.w / 1.7,
+                    y = f.y + f.h / 2,
+                })
+            end
             hs.eventtap.keyStroke('cmd', 'F', 30)
         end
         moveCursorToCenterWindow()
     end)
 end
+
+-- Switch current tab to Vivaldi or Chrome
+hs.hotkey.bind(hyper, 'u', function ()
+    local app = hs.application.frontmostApplication():name()
+
+    if (app == 'Vivaldi') then
+        local url = getBrowserUrl('Vivaldi')
+        print(url)
+        hs.eventtap.keyStroke('cmd', 'W')
+        hs.osascript.applescript([[tell application "Google Chrome"
+            activate
+            open location "]] .. url .. [["
+        end tell]])
+    elseif (app == 'Google Chrome') then
+        local url = getBrowserUrl('Google Chrome')
+        print(url)
+        hs.eventtap.keyStroke('cmd', 'W')
+        hs.osascript.applescript([[tell application "Vivaldi"
+            activate
+            open location "]] .. url .. [["
+        end tell]])
+    end
+end)
 
 -- Hints mode : show letter on each application and toggle to it
 hs.hotkey.bind({'shift'}, 'escape', function()
@@ -86,10 +111,10 @@ end)
 -- what is my ip, copying the IP in clipboard
 hs.hotkey.bind(hyper, 'z', function ()
     status, data, headers = hs.http.get("https://api.ipify.org/") -- http://ip.wains.be")
-    hs.applescript('do shell script "echo " .. data .. " | pbcopy"')
+    -- hs.execute('echo ' .. data .. ' | pbcopy')
     hs.alert.show("Your IP is " .. data, 4)
     hs.pasteboard.setContents(data)
-    hs.webview:html('<div>TEST</div>')
+    -- hs.webview:html('<div>TEST</div>')
 end)
 
 -- connected Wi-Fi
@@ -103,6 +128,34 @@ hs.hotkey.bind(hyper, 'w', function ()
 end)
 
 
+-- Circle mouse pointer on CMD+ALT+SHIFT+D
+local mouseCircle = nil
+local mouseCircleTimer = nil
+
+function mouseHighlight()
+    -- Delete an existing highlight if it exists
+    if mouseCircle then
+        mouseCircle:delete()
+        if mouseCircleTimer then
+            mouseCircleTimer:stop()
+        end
+    end
+    -- Get the current co-ordinates of the mouse pointer
+    mousepoint = hs.mouse.getAbsolutePosition()
+    -- Prepare a big red circle around the mouse pointer
+    mouseCircle = hs.drawing.circle(hs.geometry.rect(mousepoint.x-40, mousepoint.y-40, 80, 80))
+    mouseCircle:setStrokeColor({["red"]=1,["blue"]=0,["green"]=0,["alpha"]=1})
+    mouseCircle:setFill(false)
+    mouseCircle:setStrokeWidth(5)
+    mouseCircle:show()
+
+    -- Set a timer to delete the circle after 3 seconds
+    mouseCircleTimer = hs.timer.doAfter(3, function() mouseCircle:delete() end)
+end
+hs.hotkey.bind(hyper, "D", mouseHighlight)
+
+
+hs.hotkey.showHotkeys(hyper, 'a')
 
 
 -----------------------------------------------
@@ -416,11 +469,61 @@ reloadConfigOnKeyboardLayoutChange = hs.distributednotifications.new(
 )
 reloadConfigOnKeyboardLayoutChange:start()
 
+
+function getBrowserUrl(browser)
+    local ret, url = hs.osascript.applescript(
+        'tell application "' .. browser .. [["
+            get URL of active tab of first window
+        end tell]]
+    )
+    return url
+end
+
+function keewebNewEntry(appName)
+    local domain = getBrowserUrl(appName):match('^%w+://([^/]+)')
+    hs.eventtap.keyStroke('alt', 'n')
+    hs.eventtap.keyStrokes(domain)
+end
+function vscodeNewEntry(appName)
+    hs.eventtap.keyStroke('cmd', 's')
+    hs.application.launchOrFocus('Google Chrome')
+    hs.eventtap.keyStroke('cmd', 'r')
+end
+
+local keewebHKGoogle = hs.hotkey.new('alt', 'g', function()
+    keewebNewEntry("Google Chrome")
+end)
+local keewebHKVivaldi = hs.hotkey.new('alt', 'v', function()
+    keewebNewEntry("Vivaldi")
+end)
+local VSCodeHK = hs.hotkey.new({"cmd", "alt"}, 's', function()
+    vscodeNewEntry()
+end)
+
 function applicationWatcher(appName, eventType, appObject)
-    if (appName == "Finder" and eventType == hs.application.watcher.activated) then
-        -- Bring all Finder windows forward when one gets activated
-        appObject:selectMenuItem({"Fenêtre", "Tout ramener au premier plan"})
+    print(appName)
+    if (eventType == hs.application.watcher.activated) then
+        if (appName == "Finder") then
+            -- Bring all Finder windows forward when one gets activated
+            appObject:selectMenuItem({"Fenêtre", "Tout ramener au premier plan"})
+        end
+        if (appName == "KeeWeb") then
+            keewebHKGoogle:enable()
+            keewebHKVivaldi:enable()
+        end
+        if (appName == "Code") then
+            VSCodeHK:enable()
+        end
     end
+    if (eventType == hs.application.watcher.deactivated) then
+        if (appName == "KeeWeb") then
+            VSCodeHK:disable()
+        end
+        if (appName == "Code") then
+            VSCodeHK:disable()
+        end
+    end
+
 end
 appWatcher = hs.application.watcher.new(applicationWatcher)
 appWatcher:start()
@@ -428,5 +531,5 @@ appWatcher:start()
 
 -- track events
 foo = hs.distributednotifications.new(function(name, object, userInfo) print(string.format("name: %s\nobject: %s\nuserInfo: %s\n", name, object, hs.inspect(userInfo))) end)
-foo:start()
+-- foo:start()
 
