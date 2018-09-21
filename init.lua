@@ -484,10 +484,15 @@ function keewebNewEntry(appName)
     hs.eventtap.keyStroke('alt', 'n')
     hs.eventtap.keyStrokes(domain)
 end
-function vscodeNewEntry(appName)
-    hs.eventtap.keyStroke('cmd', 's')
-    hs.application.launchOrFocus('Google Chrome')
-    hs.eventtap.keyStroke('cmd', 'r')
+function vscodeNewEntry()
+    -- hs.eventtap.keyStroke('cmd', 'S')
+    local code = hs.application.frontmostApplication()
+    code:selectMenuItem({"Fichier", "Enregistrer"})
+    hs.osascript.applescript(
+        [[tell application "Chrome" to tell the active tab of its first window
+            reload
+        end tell]]
+    )
 end
 
 local keewebHKGoogle = hs.hotkey.new('alt', 'g', function()
