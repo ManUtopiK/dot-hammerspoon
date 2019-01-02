@@ -75,6 +75,16 @@ hs.urlevent.bind("test1", function(eventName, params)
     end
 end)
 
+local function keyEventCallback(event)
+    print(event:getKeyCode())
+end
+keyEventtap = hs.eventtap.new({
+    hs.eventtap.event.types.keyDown,
+    hs.eventtap.event.types.flagsChanged,
+    hs.eventtap.event.types.keyUp
+}, keyEventCallback)
+-- keyEventtap:start()
+
 
 
 

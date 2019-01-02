@@ -22,7 +22,7 @@ function vscodeNewEntry()
     local code = hs.application.frontmostApplication()
     code:selectMenuItem({"Fichier", "Enregistrer"})
     hs.osascript.applescript(
-        [[tell application "Chrome" to tell the active tab of its first window
+        [[tell application "Google Chrome" to tell the active tab of its first window
             reload
         end tell]]
     )
