@@ -13,7 +13,13 @@ function keewebNewEntry(appName)
         local domain = getBrowserUrl(appName):match('^%w+://([^/]+)')
         hs.eventtap.keyStroke('alt', 'n')
         hs.eventtap.keyStrokes(domain)
-        hs.eventtap.keyStroke('tab')
+        hs.eventtap.keyStroke({}, "tab")
+        hs.eventtap.keyStroke({}, "tab")
+        hs.eventtap.keyStroke({}, "tab")
+        hs.eventtap.keyStrokes(domain)
+        hs.eventtap.keyStroke('shift', "tab")
+        hs.eventtap.keyStroke('shift', "tab")
+        hs.eventtap.keyStroke({}, "down")
     end
 end
 
