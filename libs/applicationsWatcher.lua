@@ -36,7 +36,7 @@ end
 
 local keewebHKGoogle = hs.hotkey.new('alt', 'g', keewebNewEntry("Google Chrome"))
 local keewebHKVivaldi = hs.hotkey.new('alt', 'v', keewebNewEntry("Vivaldi"))
-local VSCodeHK = hs.hotkey.new({"cmd", "alt"}, 's', vscodeNewEntry)
+local VSCodeHK = hs.hotkey.new({"cmd", "ctrl"}, 's', vscodeNewEntry)
 
 function applicationWatcher(appName, eventType, appObject)
     print(appName)
