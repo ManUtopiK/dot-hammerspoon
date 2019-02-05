@@ -23,7 +23,7 @@ function open(app)
                 local f = win:frame()
                 hs.eventtap.leftClick({
                     x = f.x + f.w / 1.7,
-                    y = f.y + f.h / 2,
+                    y = f.y + f.h / 1.9,
                 })
             end
             hs.eventtap.keyStroke('cmd', 'F', 30)
