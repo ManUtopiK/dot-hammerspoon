@@ -19,6 +19,8 @@ hs.window.animationDuration = 0
 -----------------------------------------------
 -- open app
 hs.hotkey.bind(hyper, "H", open('hyper'))
+hs.hotkey.bind(hyper, "I", open('iTerm'))
+hs.hotkey.bind(hyper, "T", open('iTerm'))
 hs.hotkey.bind(hyper, "G", open('Google Chrome'))
 hs.hotkey.bind(hyper, "V", open('Vivaldi'))
 hs.hotkey.bind(hyper, "C", open('Visual Studio Code'))
@@ -58,6 +60,7 @@ hs.hotkey.bind(hyper, "RIGHT", moveWinRight)
 hs.hotkey.bind(hyper, "UP", moveWinUp)
 hs.hotkey.bind(hyper, "DOWN", moveWinDown)
 hs.hotkey.bind(hyper, "F", moveWinFullscreen)
+hs.hotkey.bind(hyper, "=", moveWinFullscreen)
 hs.hotkey.bind(hyper, 'PAGEDOWN', hs.grid.pushWindowNextScreen)
 hs.hotkey.bind(hyper, 'PAGEUP', hs.grid.pushWindowPrevScreen)
 
@@ -106,7 +109,7 @@ function reloadConfig(files)
 end
 hs.pathwatcher.new(os.getenv("HOME") .. "/.hammerspoon/", reloadConfig):start()
 tink_sound:play()
-hs.notify.new({title="Hammerspoon", informativeText="init.lua rechargé !"}):send():release()
+hs.notify.new({title="Hammerspoon", informativeText="init.lua rechargé !"}):send()
 
 -- watch for keyboard layout change and reload hammerspoon config
 reloadConfigOnKeyboardLayoutChange = hs.distributednotifications.new(
