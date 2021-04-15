@@ -8,6 +8,7 @@ require("libs.applicationsWatcher")
 -- Settings
 -----------------------------------------------
 local hyper = {"cmd", "alt", "ctrl"}
+local meta = {"cmd", "shift", "ctrl"}
 local tink_sound  = hs.sound.getByName("Tink") -- Sounds in /System/Library/Sounds
 
 -- No animation
@@ -18,14 +19,15 @@ hs.window.animationDuration = 0
 -- apps & tools
 -----------------------------------------------
 -- open app
-hs.hotkey.bind(hyper, "H", open('hyper'))
-hs.hotkey.bind(hyper, "I", open('iTerm'))
-hs.hotkey.bind(hyper, "T", open('iTerm'))
-hs.hotkey.bind(hyper, "G", open('Google Chrome'))
-hs.hotkey.bind(hyper, "V", open('Vivaldi'))
-hs.hotkey.bind(hyper, "C", open('Visual Studio Code'))
-hs.hotkey.bind(hyper, "SPACE", open('ForkLift'))
-hs.hotkey.bind(hyper, "K", open('keeweb'))
+hs.hotkey.bind(meta, "H", open('hyper'))
+hs.hotkey.bind(meta, "I", open('iTerm'))
+hs.hotkey.bind(meta, "T", open('iTerm'))
+hs.hotkey.bind(meta, "G", open('Google Chrome'))
+hs.hotkey.bind(meta, "F", open('Firefox'))
+hs.hotkey.bind(meta, "V", open('Vivaldi'))
+hs.hotkey.bind(meta, "C", open('Visual Studio Code'))
+hs.hotkey.bind(meta, "SPACE", open('ForkLift'))
+hs.hotkey.bind(meta, "K", open('keeweb'))
 
 -- Switch current tab to Vivaldi or Chrome
 hs.hotkey.bind(hyper, "U", switchTabOfBrowers())
