@@ -1,0 +1,27 @@
+repo_name: ManUtopiK/dot-hammerspoon
+report_id: f4c1b0838d2b4e98ba8421de0bd84fec
+repo_type: Public
+timestamp: '2023-12-14T18:38:04+00:00'
+requested_by: ManUtopiK
+provider: github
+branch: master
+detected_tools_count: 2
+tools:
+- name: Lua
+  description: Powerful, fast, lightweight, embeddable scripting language
+  website_url: http://www.lua.org/
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Languages
+  image_url: https://img.stackshare.io/service/2118/128px-Lua-Logo.svg.png
+  detection_source: Repo Metadata
+- name: Git
+  description: Fast, scalable, distributed revision control system
+  website_url: http://git-scm.com/
+  open_source: true
+  hosted_saas: false
+  category: Build, Test, Deploy
+  sub_category: Version Control System
+  image_url: https://img.stackshare.io/service/1046/git.png
+  detection_source: Repo Metadata
